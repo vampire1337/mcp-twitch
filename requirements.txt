@@ -7,3 +7,4 @@ rich>=13.9.4
 openapi-pydantic>=0.5.1
 openapi-core>=0.19.5
 uvicorn>=0.24.0
+fastapi>=0.104.0

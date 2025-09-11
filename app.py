@@ -56,13 +56,44 @@ async def main():
         if transport.lower() == 'http':
             print(f"🌐 Starting HTTP server on {host}:{port}")
             import uvicorn
+            from fastapi import FastAPI
             
-            # Run HTTP server using FastMCP's built-in HTTP support
-            await mcp.run_server(
-                transport_type='http',
+            # Create FastAPI app and add MCP routes
+            app = FastAPI(title="MCP Twitch Server", version="1.0.0")
+            
+            # Add MCP endpoint
+            @app.post("/mcp")
+            async def mcp_endpoint(request: dict):
+                # Handle MCP requests
+                return await mcp.handle_request(request)
+            
+            @app.get("/health")
+            async def health_check():
+                return {"status": "healthy", "tools": len(await mcp.get_tools())}
+            
+            @app.get("/")
+            async def root():
+                tools = await mcp.get_tools()
+                return {
+                    "name": "MCP Twitch Server", 
+                    "version": "1.0.0",
+                    "tools": len(tools),
+                    "categories": len(set(tag for tool in tools.values() for tag in getattr(tool, 'tags', set()))),
+                    "endpoints": {
+                        "mcp": "/mcp",
+                        "health": "/health"
+                    }
+                }
+            
+            # Run uvicorn server
+            config = uvicorn.Config(
+                app=app,
                 host=host,
-                port=port
+                port=port,
+                log_level="info"
             )
+            server = uvicorn.Server(config)
+            await server.serve()
             
         else:
             print("📡 Starting STDIO transport")
