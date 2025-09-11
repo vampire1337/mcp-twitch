@@ -57,18 +57,12 @@ async def main():
             print(f"🌐 Starting HTTP server on {host}:{port}")
             import uvicorn
             
-            # Create FastAPI app for HTTP transport
-            app = mcp.create_fastapi_app()
-            
-            # Run uvicorn server
-            config = uvicorn.Config(
-                app=app,
+            # Run HTTP server using FastMCP's built-in HTTP support
+            await mcp.run_server(
+                transport_type='http',
                 host=host,
-                port=port,
-                log_level="info"
+                port=port
             )
-            server = uvicorn.Server(config)
-            await server.serve()
             
         else:
             print("📡 Starting STDIO transport")

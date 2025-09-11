@@ -588,7 +588,8 @@ async def main():
         for tool_name in sorted(tools.keys()):
             tool = tools[tool_name]
             tags = getattr(tool, 'tags', set())
-            print(f"  • {tool_name} {f'[{", ".join(tags)}]' if tags else ''}")
+            tags_str = f"[{', '.join(tags)}]" if tags else ""
+            print(f"  • {tool_name} {tags_str}")
         
         # Запускаем сервер
         if args.transport == 'stdio':
