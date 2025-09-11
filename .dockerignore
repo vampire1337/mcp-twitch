@@ -1,0 +1,51 @@
+# Docker ignore file for Railway deployment
+
+# Git
+.git/
+.gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv
+pip-log.txt
+pip-delete-this-directory.txt
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Documentation (keep only essential)
+*.md
+!README.md
+
+# Tests and demo files (already deleted)
+test_*.py
+demo_*.py
+*_test.py
+
+# Local env files (Railway will provide env vars)
+.env
+.env.local
+.env.production
+.env.staging
+
+# Temporary files
+*.tmp
+*.temp
+.cache/

@@ -1,0 +1,9 @@
+# Production dependencies for Railway deployment
+fastmcp
+python-dotenv>=1.1.0
+httpx>=0.28.1
+pydantic[email]>=2.11.7
+rich>=13.9.4
+openapi-pydantic>=0.5.1
+openapi-core>=0.19.5
+uvicorn>=0.24.0
