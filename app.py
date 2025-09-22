@@ -55,13 +55,13 @@ async def main():
         # Run the server based on transport type
         if transport.lower() == 'http':
             print(f"🌐 Starting HTTP server on {host}:{port}")
-            # Use FastMCP's built-in HTTP transport
-            mcp.run(transport='http', host=host, port=port)
+            # Use FastMCP's built-in HTTP transport with async method
+            await mcp.run_async(transport='http', host=host, port=port)
             
         else:
             print("📡 Starting STDIO transport")
-            # Run stdio transport (for local MCP clients)
-            mcp.run()
+            # Run stdio transport (for local MCP clients) with async method
+            await mcp.run_async()
             
     except Exception as e:
         print(f"❌ Server error: {e}")

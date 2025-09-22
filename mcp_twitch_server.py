@@ -591,13 +591,13 @@ async def main():
             tags_str = f"[{', '.join(tags)}]" if tags else ""
             print(f"  • {tool_name} {tags_str}")
         
-        # Запускаем сервер
+        # Запускаем сервер с async методами
         if args.transport == 'stdio':
-            mcp.run()
+            await mcp.run_async()
         elif args.transport == 'http':
-            mcp.run(transport='http', host=args.host, port=args.port)
+            await mcp.run_async(transport='http', host=args.host, port=args.port)
         elif args.transport == 'sse':
-            mcp.run(transport='sse', host=args.host, port=args.port)
+            await mcp.run_async(transport='sse', host=args.host, port=args.port)
             
     except KeyboardInterrupt:
         print("\n👋 Server stopped by user")
