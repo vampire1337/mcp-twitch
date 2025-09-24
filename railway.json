@@ -1,13 +1,31 @@
 {
   "$schema": "https://railway.app/railway.schema.json",
   "build": {
-    "builder": "DOCKERFILE",
-    "dockerfilePath": "Dockerfile"
+    "builder": "dockerfile"
   },
   "deploy": {
-    "numReplicas": 1,
-    "sleepApplication": false,
-    "restartPolicyType": "ON_FAILURE",
+    "startCommand": "uv run python mcp_twitch_server.py --transport http --host 0.0.0.0 --port $PORT",
+    "healthcheckPath": "/health",
+    "healthcheckTimeout": 300,
+    "restartPolicyType": "on-failure",
     "restartPolicyMaxRetries": 10
+  },
+  "environments": {
+    "production": {
+      "variables": {
+        "TWITCH_CLIENT_ID": null,
+        "TWITCH_ACCESS_TOKEN": null,
+        "HOST": "0.0.0.0",
+        "AUTOMATION_MODE": "false"
+      }
+    },
+    "automation": {
+      "variables": {
+        "TWITCH_CLIENT_ID": null,
+        "TWITCH_ACCESS_TOKEN": null,
+        "HOST": "0.0.0.0",
+        "AUTOMATION_MODE": "true"
+      }
+    }
   }
 }

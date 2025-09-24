@@ -1,5 +1,5 @@
-# Dockerfile for Railway deployment
-FROM python:3.11-slim
+# Use Python 3.12 slim image for better performance
+FROM python:3.12-slim
 
 # Set working directory
 WORKDIR /app
@@ -9,30 +9,28 @@ RUN apt-get update && apt-get install -y \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements first for better caching
-COPY requirements.txt .
+# Install uv for fast Python package management
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
 
-# Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+# Copy dependency files
+COPY pyproject.toml uv.lock ./
 
-# Copy application files
-COPY . .
+# Install dependencies with uv (much faster than pip)
+RUN uv sync --frozen --no-dev
+
+# Copy source code
+COPY mcp_twitch_server.py openapi.json ./
 
 # Create non-root user for security
-RUN useradd --create-home --shell /bin/bash app \
-    && chown -R app:app /app
+RUN useradd --create-home --shell /bin/bash app && chown -R app:app /app
 USER app
 
-# Set environment variables
-ENV PYTHONUNBUFFERED=1
-ENV FASTMCP_LOG_LEVEL=INFO
-
 # Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD python -c "import mcp_twitch_server; print('healthy')" || exit 1
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+  CMD curl -f http://localhost:${PORT:-8080}/health || exit 1
 
-# Expose port for HTTP transport
+# Expose port (Railway will set PORT env var)
 EXPOSE 8080
 
-# Default command - Railway entry point
-CMD ["python", "app.py"]
+# Default command - can be overridden by Railway
+CMD ["uv", "run", "python", "mcp_twitch_server.py", "--transport", "http", "--host", "0.0.0.0", "--port", "8080"]

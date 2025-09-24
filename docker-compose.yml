@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  mcp-twitch:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - TWITCH_CLIENT_ID=${TWITCH_CLIENT_ID}
+      - TWITCH_ACCESS_TOKEN=${TWITCH_ACCESS_TOKEN}
+      - TWITCH_REFRESH_TOKEN=${TWITCH_REFRESH_TOKEN}
+      - PORT=8080
+      - HOST=0.0.0.0
+    env_file:
+      - .env
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # Automation mode variant
+  mcp-twitch-automation:
+    build: .
+    ports:
+      - "8081:8080"
+    environment:
+      - TWITCH_CLIENT_ID=${TWITCH_CLIENT_ID}
+      - TWITCH_ACCESS_TOKEN=${TWITCH_ACCESS_TOKEN}
+      - TWITCH_REFRESH_TOKEN=${TWITCH_REFRESH_TOKEN}
+      - PORT=8080
+      - HOST=0.0.0.0
+    env_file:
+      - .env
+    command: ["uv", "run", "python", "mcp_twitch_server.py", "--automation-mode", "--transport", "http", "--host", "0.0.0.0", "--port", "8080"]
+    restart: unless-stopped
+    profiles:
+      - automation
