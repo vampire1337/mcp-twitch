@@ -6,26 +6,6 @@
   "deploy": {
     "startCommand": "uv run python mcp_twitch_server.py --transport http --host 0.0.0.0 --port $PORT",
     "healthcheckPath": "/health",
-    "healthcheckTimeout": 300,
-    "restartPolicyType": "on-failure",
-    "restartPolicyMaxRetries": 10
-  },
-  "environments": {
-    "production": {
-      "variables": {
-        "TWITCH_CLIENT_ID": null,
-        "TWITCH_ACCESS_TOKEN": null,
-        "HOST": "0.0.0.0",
-        "AUTOMATION_MODE": "false"
-      }
-    },
-    "automation": {
-      "variables": {
-        "TWITCH_CLIENT_ID": null,
-        "TWITCH_ACCESS_TOKEN": null,
-        "HOST": "0.0.0.0",
-        "AUTOMATION_MODE": "true"
-      }
-    }
+    "restartPolicyType": "ON_FAILURE"
   }
 }

@@ -1,26 +1,7 @@
 [build]
-# Use Dockerfile for deployment
 builder = "dockerfile"
 
 [deploy]
-# Railway will set PORT automatically
 startCommand = "uv run python mcp_twitch_server.py --transport http --host 0.0.0.0 --port $PORT"
 healthcheckPath = "/health"
-healthcheckTimeout = 300
-restartPolicyType = "on-failure"
-restartPolicyMaxRetries = 10
-
-# Environment variables
-[env]
-# Required: Your Twitch API credentials
-TWITCH_CLIENT_ID = { required = true }
-
-# Optional: For authenticated endpoints
-TWITCH_ACCESS_TOKEN = { required = false }
-TWITCH_REFRESH_TOKEN = { required = false }
-
-# Server config (Railway sets PORT automatically)
-HOST = "0.0.0.0"
-
-# Automation mode (optional)
-AUTOMATION_MODE = { required = false, default = "false" }
+restartPolicyType = "ON_FAILURE"
