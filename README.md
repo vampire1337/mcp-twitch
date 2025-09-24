@@ -176,6 +176,9 @@ railway deploy
 # Set environment variables
 railway variables set TWITCH_CLIENT_ID=your_client_id
 railway variables set TWITCH_ACCESS_TOKEN=your_token
+
+# Set custom start command in Railway UI:
+# uv run python mcp_twitch_server.py --transport http --host 0.0.0.0 --port $PORT
 ```
 
 ### HTTP API

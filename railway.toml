@@ -1,6 +1,2 @@
 [build]
 builder = "dockerfile"
-
-[deploy]
-startCommand = "uv run python mcp_twitch_server.py --transport http --host 0.0.0.0 --port $PORT"
-restartPolicyType = "ON_FAILURE"
