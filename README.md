@@ -183,8 +183,10 @@ railway variables set TWITCH_ACCESS_TOKEN=your_token
 
 ### HTTP API
 ```bash
-# Health check
-curl http://localhost:8080/health
+# Health check (MCP endpoint)
+curl -X POST http://localhost:8080/mcp \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc": "2.0", "id": 1, "method": "ping"}'
 
 # List all tools
 curl -X POST http://localhost:8080/mcp \

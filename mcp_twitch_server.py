@@ -911,13 +911,6 @@ async def main():
         integration_ready = "N8N ready" if args.automation_mode else "MCP ready"
         print(f"\n🚀 {integration_ready} on {args.transport} transport!")
         
-        # Добавляем health check endpoint для Railway
-        if args.transport in ['http', 'sse']:
-            @mcp.server.get("/health")
-            async def health_check():
-                """Health check endpoint for Railway and monitoring"""
-                return {"status": "healthy", "service": "twitch-mcp-server", "mode": "automation" if args.automation_mode else "universal"}
-        
         # Запускаем сервер с async методами
         if args.transport == 'stdio':
             await mcp.run_async()

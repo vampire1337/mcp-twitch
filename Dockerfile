@@ -25,9 +25,9 @@ COPY mcp_twitch_server.py openapi.json ./
 RUN useradd --create-home --shell /bin/bash app && chown -R app:app /app
 USER app
 
-# Health check
+# Health check - basic port check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
-  CMD curl -f http://localhost:${PORT:-8080}/health || exit 1
+  CMD curl -f http://localhost:${PORT:-8080}/mcp || exit 1
 
 # Expose port (Railway will set PORT env var)
 EXPOSE 8080
